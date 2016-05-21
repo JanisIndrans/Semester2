@@ -1,0 +1,178 @@
+package dbLayer;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import modelLayer.Merchandise;
+import exceptionsLayer.DatabaseException;
+
+public class DBMerchandise implements IFDBMerchandise {
+	
+	private  Connection con;
+	
+	public DBMerchandise(){
+		con = DBConnect.getInstance().getDBcon();
+	}
+	
+	@Override
+	public int insertMerchandise(Merchandise merchandise) throws DatabaseException{
+		  int rc = -1;
+		  String query="";
+		  /*
+		   String query="INSERT INTO Merchandise(name, cAddress,email, zipcodeID,phoneNR,isCompany)VALUES('"+
+				   cust.getName()  + "','"  +
+				   cust.getAddress()  + "','"  +
+				   cust.getEmail()+ "','" +
+				   cust.getZipCodeID() + "','" +
+				   cust.getPhoneno() + "','"+
+				   cust.isCompany()
+	            	+")";
+	                     */
+
+	       System.out.println("insert : " + query);
+	      try{
+	          Statement stmt = con.createStatement();
+	          stmt.setQueryTimeout(5);
+	     	  rc = stmt.executeUpdate(query);
+	          stmt.close();
+	      }
+	       catch(SQLException ex){
+	          System.out.println("Merchandise not inserted");
+	          throw new DatabaseException ("Something else is wrong in DBMerchandise");
+	       }
+	       return(rc);
+	}
+
+	@Override
+	public ArrayList<Merchandise> getAllMerchandises() {
+		return null;
+	}
+
+	@Override
+	public Merchandise findMerchandise(String name) throws DatabaseException {
+		String wClause = "  name = '" + name + "'";
+        return singleWhere(wClause);
+	}
+
+	@Override
+	public int updateMerchandise(String name) {
+		return 0;
+	}
+//private method
+		private Merchandise getMerchandise(String wClause){
+			ResultSet results;
+			Merchandise merchandiseObj = new Merchandise();	                
+		        String query =  buildQuery(wClause);
+			try{
+		 		Statement stmt = con.createStatement();
+		 		stmt.setQueryTimeout(5);
+		 		results = stmt.executeQuery(query);	 		
+		 		if( results.next() ){
+		 			merchandiseObj = buildMerchandise(results);
+	                            stmt.close();
+				}
+	                        else{
+	                        	merchandiseObj = null;
+	                        }
+			}
+		 	catch(Exception e){
+		 		System.out.println("Query exception: "+e);
+		 	}
+			return merchandiseObj;
+		}
+		//course misc where
+		private ArrayList<Merchandise> miscWhere(String wClause)
+		{
+	        ResultSet results;
+		    ArrayList<Merchandise> list = new ArrayList<Merchandise>();				
+		    String query =  buildQuery(wClause);	  
+	            try{
+			Statement stmt = con.createStatement();
+		 	stmt.setQueryTimeout(5);
+		 	results = stmt.executeQuery(query);
+		 	
+		
+			while( results.next() ){
+				Merchandise merchandiseObj = new Merchandise();
+				merchandiseObj = buildMerchandise(results);	
+	            list.add(merchandiseObj);	
+			}//end while
+	             stmt.close();    				
+			}//end try	
+		 	catch(Exception e){
+		 		System.out.println("Query exception - select: "+e);
+				e.printStackTrace();
+		 	}
+			return list;
+		}
+		
+		// Single where is used when we only select one thing 	
+		private Merchandise singleWhere(String wClause)
+		{
+			ResultSet results;
+			Merchandise merchandiseObj = new Merchandise();	                
+		    String query =  buildQuery(wClause);
+	        System.out.println(query);
+			try{ 
+		 		Statement stmt = con.createStatement();
+		 		stmt.setQueryTimeout(5);
+		 		results = stmt.executeQuery(query);		 		
+		 		if( results.next() ){
+	             merchandiseObj = buildMerchandise(results);	                           
+	             stmt.close();
+				}else{
+					merchandiseObj = null;
+	            }
+			}//end try	
+		 	catch(Exception e){
+		 		System.out.println("Query exception: "+e);
+		 	}
+			return merchandiseObj;
+		}
+		//method to build the query
+		private String buildQuery(String wClause)
+		{
+		    String query="SELECT *  FROM Merchandise";
+			
+			if (wClause.length()>0)
+				query=query+" WHERE "+ wClause;
+				
+			return query;
+		}
+		//method to build an employee object
+		private Merchandise buildMerchandise(ResultSet results)
+	      {   
+			Merchandise merchandiseObj = new Merchandise();
+	          try{     	 
+	        	  merchandiseObj.setName(results.getString("name"));
+	        	  /*
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   * 
+	        	   */
+	          }
+	         catch(Exception e)
+	         {
+	             System.out.println("Error in building the merchandise object");
+	         }
+	         return merchandiseObj;
+	      }
+
+}
