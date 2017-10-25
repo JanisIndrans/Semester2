@@ -5,15 +5,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 
 public class DBConnect {
-	//Local
-	private static final String driver = "jdbc:sqlserver://oldprojects.database.windows.net:1433";
-	// "jdbc:sqlserver://localhost:1433";
-	//private static final String driver = "jdbc:sqlserver://localhost:1433";
-	private static final String databaseName = ";databaseName=KadZebrasDeg";
-	// SQL Server
-	//private static String userName = ";user=sa";
-	private static String userName = ";user=janisindrans@oldprojects";
-	private static String password = ";password=OldProjects1";
 
 	private DatabaseMetaData dma;
 	private static Connection con;
@@ -23,14 +14,14 @@ public class DBConnect {
 	// the constructor is private to ensure that only one object of this class
 	// is created
 	private DBConnect() {
-		//String url = "jdbc:sqlserver://[Server];database=[DB_Name];user=[User_Name];password=[Password]";
-		String url = "jdbc:sqlserver://janisindrans.database.windows.net:1433;" +
-				"database=Portfolio;" +
-				"user=janis@janisindrans;" +
-				"password=140189Janix;" +
+
+		String url = "jdbc:[Your_Server];" +
+				"database=[Your_Db];" +
+				"user=[Your_User]" +
+				"password=[Your_Password]" +
 				"encrypt=true;" +
 				"trustServerCertificate=false;" +
-				"hostNameInCertificate=*.database.windows.net;" +
+				"hostNameInCertificate=[Your_Certificate]" +
 				"loginTimeout=30;";
 
 
