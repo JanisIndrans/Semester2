@@ -23,8 +23,17 @@ public class DBConnect {
 	// the constructor is private to ensure that only one object of this class
 	// is created
 	private DBConnect() {
-		String url = "jdbc:sqlserver://oldprojects.database.windows.net:1433;database=KadZebrasDeg;user=janisindrans@oldprojects;password=OldProjects1";
-		
+		//String url = "jdbc:sqlserver://[Server];database=[DB_Name];user=[User_Name];password=[Password]";
+		String url = "jdbc:sqlserver://janisindrans.database.windows.net:1433;" +
+				"database=Portfolio;" +
+				"user=janis@janisindrans;" +
+				"password=140189Janix;" +
+				"encrypt=true;" +
+				"trustServerCertificate=false;" +
+				"hostNameInCertificate=*.database.windows.net;" +
+				"loginTimeout=30;";
+
+
 		try {
 			// load af driver
 			// SQL Server
